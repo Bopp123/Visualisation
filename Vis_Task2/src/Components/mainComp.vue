@@ -1,8 +1,8 @@
 <template>
 	<div>
 		<div v-if="!finishedBool" class="flex text-center">
-			<paint :radius="radius1" :circle="circle" :randomShapes="randomShapes" :toPaint="true"class="paint paint1"></paint>
-			<paint :radius="radius2" :randomShapes="randomShapes" :circle="circle" :toPaint="true" class="paint paint2"></paint>
+			<paint :special="special1" :testType="current" :randomShapes="randomShapes" :toPaint="true"class="paint paint1"></paint>
+			<paint :special="special2" :randomShapes="randomShapes" :testType="current" :toPaint="true" class="paint paint2"></paint>
 		</div>
 		<div v-else class="text-center">
 			<resultsComp :results="resultData"></resultsComp>
@@ -10,7 +10,7 @@
 		 <div class="text-center">
 			<h3>{{howManyLeft}} to go</h3>
 		</div>
-		<controls></controls>
+		<controls :type="current"></controls>
 	</div>			
 </template>
 
@@ -28,147 +28,156 @@
 		},
 		data: function() {
 			return {
-				radius2: 2,
-				radius1: 1,
-				factors: [],
-				circle: true,
-				xArray: [],
 				finishedBool: false,
-				meanX: 0,
 				randomShapes: [],
-				dataEntrys: [],
-				resultData: []
+				special1: false,
+				special2: false,
+				current : {},
+				testData: [],
+				resultData : [],
+				testCounter: 0,
 			}
 		},
 		methods: {
+			determineSpecial(){
+				const rnd = Math.random();
+				if(rnd < 0.5){
+					this.special1 = true;
+					this.special2 = false;
+				}else{
+					this.special1 = false;
+					this.special2 = true;
+				}
+			},
 		generatePlatforms(k, platformWidth, platformHeight, platformSize) {
 
-				var platforms = [];
-				var placed = 0,
-					maxAttempts = k * 10;
-				while (placed < k && maxAttempts > 0) {
+			var platforms = [];
+			var placed = 0;
+			var maxTrys = 0;
+			platforms.push({
+					x: 100,
+					y: 100,
+					w: platformSize,
+					h: platformSize
+				});
+			while (placed < k && maxTrys < 10000) {
+				var available = false;
+				while (!available) {
+
 					var x = Math.floor(Math.random() * platformWidth),
-						y = Math.floor(Math.random() * platformHeight),
-						available = true;
-					for (var point in platforms) {
-						if (Math.abs(point.x - x) < platformSize && Math.abs(point.y - y) < platformSize) {
+						y = Math.floor(Math.random() * platformHeight);
+
+					for (let i = 0; platforms.length;i++) {
+						maxTrys += 1;
+						if(i=== platforms.length){
+							break;
+						}
+						var xDelta = Math.abs(platforms[i].x - x);
+						var yDelta = Math.abs(platforms[i].y - y);
+						if (xDelta < platformSize+2 && yDelta < platformSize+2) {
 							available = false;
 							break;
 						}
+						available = true;
 					}
-					if (available) {
-						platforms.push({
-							x: x,
-							y: y,
-							w: 20,
-							h: 20
-						});
-						placed += 1;
-					}
-					maxAttempts -= 1;
 				}
-				return platforms;
-		},
-		getData(){
-			this.$db.allDocs()
-				.then((data) => {	
-					var ids = [];
-					data.rows.forEach((element) => {	
-						ids.push(element.id);
-					})
-					ids.forEach((el) => {	
-						this.$db.get(el)
-							.then((a) => {	
-								this.dataEntrys.push(a);
-							});
-					});
-					console.log(this.dataEntrys);
+
+				platforms.push({
+					x: x,
+					y: y,
+					size: platformSize
 				});
+				placed += 1;
+				
+			}
+			return platforms;
 		},
 		finished() {
-				const sumX = this.xArray.reduce(function(acc, val) {
-					return acc + val;
-				}, 0);
-				this.meanX = sumX/10;
-				this.finishedBool = true;
+				this.getDataFromFirebase();
 			},
 			reset(){
-				this.changeRadius();
-				this.factors = [];
-				this.xArray= [];
+				this.testCounter = 0;
 				this.finishedBool= false;
-			},
-			changeRadius(){
-			this.radius1 = Math.random() * 50;
-			if (this.radius1 < 20) {
-				this.radius1 = 20+(this.radius1*2);
-			}
-				let multFactor = (Math.random()*5);
-				if(multFactor <1 ){
-					multFactor = 1.5 + multFactor * 2;
-				}
-				console.log('multfactor', multFactor);
-				this.radius2 = this.radius1 * multFactor;
-				if(this.radius2 > 140){
-					this.radius2 = 140;
-				}
-			},
-			calcX(factor){
-				const propotion = this.calcArea(this.radius2)/this.calcArea(this.radius1);
-				return Math.log(factor)/Math.log(propotion);
-			},
-			calcArea(r){
-				if(this.circle){
-					return Math.pow(r, 2)*Math.PI;
-				}else{
-					return Math.pow(r, 2);
-				}
+				this.boot();
 			},
 			importJsonData(){
-				this.resultData =  JsonData.data;
-				console.log("afasdafadsdadsda",this.resultData);
+				this.testData =  JsonData.data;
+			},
+			boot(){
+			if (this.testData.length !== this.testCounter) {
+				this.current = this.testData[this.testCounter];
+				this.determineSpecial();
+				this.randomShapes = this.generatePlatforms(50, 265, 265, 30);
 			}
+				
+			},
+
+			sendToFirebase(data){
+				this.$http.post('https://vis-tasks.firebaseio.com/task2.json',data)
+					.then((res) => {	
+						if(res.status != 200){
+							alert('something went wrong with the server');
+						}
+					})
+			},
+		getDataFromFirebase() {
+			this.$http.get('https://vis-tasks.firebaseio.com/task2.json')
+				.then((res) => {
+					for (let entry in res.body) {
+						let data = {};
+						if (!res.body.hasOwnProperty(entry)) continue;
+
+						var obj = res.body[entry];
+						for (var prop in obj) {
+							if (!obj.hasOwnProperty(prop)) continue;
+							data[prop] = obj[prop];
+						}
+						console.log(data);
+						this.resultData.push(data);
+					}
+					this.finishedBool = true;
+				})
+		},
+			validateAnswer(answer){
+				if(answer === "left" && this.special1) return true;
+				if(answer === "left" && this.special2) return false;
+				if(answer === "right" && this.special1) return false;
+				if(answer === "right" && this.special2) return true;
+			}
+
 		},
 		computed:{
 			howManyLeft: function(){
-				return 10- this.factors.length;
+				return this.testData.length- this.testCounter;
 			}
 		},
 		watch: {
-			factors: function() {
-				if (this.factors.length === 1) {
+			testCounter: function() {
+				if (this.testData.length === this.testCounter) {
 					this.finished();
 				}
 			}
 		},
 		created() {
-			eventBus.$on('factorEntered', (factor) => {
-				this.factors.push(factor);
-				this.xArray.push(this.calcX(factor));
-				console.log(this.xArray);
-				this.changeRadius();
-				console.log(this.factors.length);
-				this.randomShapes =this.generatePlatforms(30, 300, 300,30);
-				this.$db.post({
-					factor: factor
-				})
-					.then((data) => {	
-					})
-			});
-
-			eventBus.$on('modeChanged', () => {	
-				this.circle = !this.circle;
+			eventBus.$on('factorEntered', (answer) => {
+				this.sendToFirebase({
+					time: this.current.time,
+					distractor: this.current.distractor,
+					feature: this.current.feature,
+					answer: this.validateAnswer(answer)
+				});
+				this.testCounter += 1;
+				this.boot();
+				console.log("shapes count: ", this.randomShapes.length);
 			});
 
 			eventBus.$on('reset', () => {	
 				this.reset();
 			});
-			this.getData();
-			this.importJsonData();
 		},
 		beforeMount(){
-			this.changeRadius();
-			this.randomShapes =this.generatePlatforms(10, 300, 300,40);
+			this.importJsonData();
+			this.boot();
 		}
 	}
 </script>

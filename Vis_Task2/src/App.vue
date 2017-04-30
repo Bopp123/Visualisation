@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="text-center container">
-    <h1 >Visualisation Task 1</h1>
+    <h1 >Visualisation Task 2</h1>
     <mainComp></mainComp> 
   </div>
 </template>

@@ -1,38 +1,72 @@
 {
 	"data": [{
 		"time": 400,
-		"distractor": "false",
-		"feature": "form",
-		"answer": "true"
+		"distractor": false,
+		"feature": "form"
 	},
 	{
 		"time": 400,
-		"distractor": "false",
-		"feature": "form",
-		"answer": "true"
+		"distractor": false,
+		"feature": "color"
 	},
 	{
 		"time": 400,
-		"distractor": "false",
-		"feature": "form",
-		"answer": "true"
+		"distractor": false,
+		"feature": "mixed"
 	},
 	{
 		"time": 400,
-		"distractor": "false",
-		"feature": "form",
-		"answer": "true"
+		"distractor": true,
+		"feature": "form"
 	},
 	{
-		"time": 400,
-		"distractor": "false",
-		"feature": "form",
-		"answer": "true"
+		"time": 325,
+		"distractor": false,
+		"feature": "form"
 	},
 	{
-		"time": 400,
-		"distractor": "false",
-		"feature": "form",
-		"answer": "true"
+		"time": 325,
+		"distractor": false,
+		"feature": "color"
+	},{
+		"time": 325,
+		"distractor": false,
+		"feature": "mixed"
+	},{
+		"time": 325,
+		"distractor": true,
+		"feature": "form"
+	},{
+		"time": 250,
+		"distractor": false,
+		"feature": "form"
+	},{
+		"time": 250,
+		"distractor": false,
+		"feature": "color"
+	},{
+		"time": 250,
+		"distractor": false,
+		"feature": "mixed"
+	},{
+		"time": 250,
+		"distractor": true,
+		"feature": "form"
+	},{
+		"time": 175,
+		"distractor": false,
+		"feature": "form"
+	},{
+		"time": 175,
+		"distractor": false,
+		"feature": "color"
+	},{
+		"time": 175,
+		"distractor": false,
+		"feature": "mixed"
+	},{
+		"time": 175,
+		"distractor": true,
+		"feature": "form"
 	}]
 }

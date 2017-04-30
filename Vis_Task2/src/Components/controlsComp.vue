@@ -1,16 +1,13 @@
 <template>
 	<div>
 		<div class="">
-			<span>right is </span>
-			<input type="number" v-model="factor" step="1">
-			<span> times bigger then left</span>
+			<h2>{{question}}</h2>
+			<input type="radio" value="left" name="answer" v-model="answer"><span>left</span>
+			<span>or  </span>
+			<input type="radio" name="answer" value="right" v-model="answer"><span>right</span>
 			<button class="btn-primary btn" @click="factorEntered">Next</button>
 		</div>
 		<div class="text-center ctrl">
-			<select name="modeSelect" id="" @change="modeChanged">
-				<option value="circle">Circle</option>
-				<option value="square">Square</option>
-			</select>
 			<button class="btn-danger btn" @click="reset">Restart</button>
 		</div>
 	</div>			
@@ -21,19 +18,39 @@ import {eventBus} from "../main";
 export default{
 	data: function () {
 		return {
-			factor: 1
+			answer: ""
 		} 
+	},
+	props:{
+		type: Object
 	},
 	methods: {
 		factorEntered(){
-			eventBus.$emit('factorEntered', this.factor);
-			this.factor = 1;
-		},
-		modeChanged(){
-			eventBus.$emit('modeChanged');
+			console.log(this.answer);
+			eventBus.$emit('factorEntered', this.answer);
 		},
 		reset(){
 			eventBus.$emit('reset');
+		}
+	},
+	computed:{
+		question: function () {
+			if(this.type.distractor == true){
+				return "Where was the circle?"
+			}
+			switch (this.type.feature) {
+				case "form":
+					return "Where was the circle?"
+					break;
+				case "color":
+					return "Where was the red circle?"
+					break;
+				case "mixed":
+					return "Where was the red circle?"
+					break;
+				default:
+					break;
+			}
 		}
 	}
 	}
@@ -42,8 +59,7 @@ export default{
 <style>
 
 input {
-	margin: 5px;
-	width:50px;
+	width:20px;
 }
 
 span{

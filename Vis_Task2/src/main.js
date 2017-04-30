@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
-import DB from './db.js'
-Vue.use(DB)
+import VueResource from 'vue-resource';
+
+Vue.use(VueResource);
 
 export const eventBus = new Vue();
 
