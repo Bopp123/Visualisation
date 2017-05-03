@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="text-center container">
-    <h1 >Visualisation Task 2</h1>
-    <mainComp></mainComp> 
+    <h1 >Visualization Task 2</h1>
+    <mainComp></mainComp>
   </div>
 </template>
 
@@ -12,7 +12,7 @@ export default {
   components:{
     mainComp: MainComp
   }
-  
+
 }
 </script>
 
