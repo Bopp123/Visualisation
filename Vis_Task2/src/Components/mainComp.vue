@@ -1,5 +1,6 @@
 <template>
-	<div>
+<div>
+	<div v-if="!counting && started">
 		<div v-if="!finishedBool" class="flex text-center">
 			<paint :special="special1" :testType="current" :randomShapes="randomShapes" :toPaint="true"class="paint paint1"></paint>
 			<paint :special="special2" :randomShapes="randomShapes" :testType="current" :toPaint="true" class="paint paint2"></paint>
@@ -8,10 +9,17 @@
 			<resultsComp :results="resultData"></resultsComp>
 		</div>
 		 <div class="text-center">
-			<h3>{{howManyLeft}} to go</h3>
+			<h3 v-if="howManyLeft!=0">{{howManyLeft}} to go</h3>
 		</div>
-		<controls :type="current"></controls>
-	</div>			
+		<controls v-if="howManyLeft!=0" :type="current"></controls>
+	</div>
+	<div v-else-if="counting && started" class="text-center">
+		<h1>{{startCounter}}</h1>
+	</div>
+	<div v-else-if="!started" class="text-center start-div">
+		<button class="btn-primary btn" @click="start">Start</button>
+	</div>
+</div>			
 </template>
 
 <script>
@@ -36,9 +44,23 @@
 				testData: [],
 				resultData : [],
 				testCounter: 0,
+				started: false,
+				counting: false,
+				startCounter: 3,
+				intervalId: 0
 			}
 		},
 		methods: {
+			start(){
+				this.started = true;
+				this.counting = true;
+				this.startCounter = 3;
+				const that = this;
+
+				this.intervalId = setInterval(function(){	
+					that.startCounter -= 1;
+				}.bind(that), 1000);
+			},
 			determineSpecial(){
 				const rnd = Math.random();
 				if(rnd < 0.5){
@@ -98,7 +120,8 @@
 			reset(){
 				this.testCounter = 0;
 				this.finishedBool= false;
-				this.boot();
+				this.counting = false;
+				this.started = false;
 			},
 			importJsonData(){
 				this.testData =  JsonData.data;
@@ -132,7 +155,6 @@
 							if (!obj.hasOwnProperty(prop)) continue;
 							data[prop] = obj[prop];
 						}
-						console.log(data);
 						this.resultData.push(data);
 					}
 					this.finishedBool = true;
@@ -156,6 +178,13 @@
 				if (this.testData.length === this.testCounter) {
 					this.finished();
 				}
+			},
+			startCounter: function () {
+				if (this.startCounter == 0) {
+					this.counting =false;
+					this.boot();
+					window.clearInterval(this.intervalId);
+				}
 			}
 		},
 		created() {
@@ -168,7 +197,6 @@
 				});
 				this.testCounter += 1;
 				this.boot();
-				console.log("shapes count: ", this.randomShapes.length);
 			});
 
 			eventBus.$on('reset', () => {	
@@ -177,12 +205,11 @@
 		},
 		beforeMount(){
 			this.importJsonData();
-			this.boot();
 		}
 	}
 </script>
 
-<style >
+<style>
 	.paint{
 		width: 300px;
 		height: 300px;
@@ -207,5 +234,9 @@
 		font-size: 60px;
 		margin: 50px;
 		color: red;
+	}
+
+	.start-div {
+		margin: 100px;
 	}
 </style>

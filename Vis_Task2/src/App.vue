@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="text-center container">
-    <h1 >Visualization Task 2</h1>
+    <h1 class="header">Visualization Task 2</h1>
     <mainComp></mainComp>
   </div>
 </template>
@@ -19,5 +19,9 @@ export default {
 <style>
 .container{
   max-width: 900px;
+}
+
+.header{
+	margin-bottom: 50px;
 }
 </style>
