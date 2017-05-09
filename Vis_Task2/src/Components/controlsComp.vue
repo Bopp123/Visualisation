@@ -2,6 +2,7 @@
 	<div>
 		<div class="">
 			<h2>{{question}}</h2>
+			<input type="radio" name="answer" value="not" v-model="answer" id="not"><span>not found</span>
 			<input type="radio" value="left" name="answer" v-model="answer"><span>left</span>
 			<span>or  </span>
 			<input type="radio" name="answer" value="right" v-model="answer"><span>right</span>
@@ -26,7 +27,6 @@ export default{
 	},
 	methods: {
 		factorEntered(){
-			console.log(this.answer);
 			eventBus.$emit('factorEntered', this.answer);
 		},
 		reset(){
