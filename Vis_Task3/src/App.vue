@@ -16,28 +16,19 @@ export default {
     }
   },
   methods: {
-    formatJson: function(file) {
-
-      var result = [];
-      var keyNames = [];
-      file.forEach((element, index) => {
-        if (index == 0) {
-           keyNames = element;
-           console.log(keyNames);
-        } else {
-          var obj = {};
-          element.forEach((entry, index2) => {
-            let prop = keyNames[index2].toLowerCase().replace(" ","");
-            obj[prop] = entry;
-          })
-          result.push(obj)
-        } 
-      });
-      return result;
-    }
   },
   created() {
-    this.$carsData = this.formatJson(JsonData);
+    var filter1 = {
+      prop: "modelyear",
+      min: 71,
+      max: 80
+    };
+    var filter2 = {
+      prop: "mpg",
+      max: 20
+    };
+    this.$carsData = this.$formatJson(JsonData);
+    this.$carsData = this.$filterData(this.$carsData, filter1,filter2);
     console.log(this.$carsData);
   }
 }
