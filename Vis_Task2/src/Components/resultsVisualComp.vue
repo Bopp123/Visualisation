@@ -1,4 +1,4 @@
-yOffset<template>
+<template>
 	<div>
 		<div>
 			<h2>Your Results</h2>
@@ -110,7 +110,7 @@ yOffset<template>
 												(this.width-2*xOffset)/(4+2),
 												this.results[bestMixedIdx].time * ((this.height-2*yOffset)/maxRange)
 												);
-					ctx1.fillText(this.results[bestMixedIdx].feature, this.width/9 + 2 * (((this.width-2*(this.width/9))/4) ) + ((this.width-2*xOffset)/(4+2) /2), this.height - this.height/15);
+					ctx1.fillText("mixed", this.width/9 + 2 * (((this.width-2*(this.width/9))/4) ) + ((this.width-2*xOffset)/(4+2) /2), this.height - this.height/15);
 
 					ctx1.fillRect(this.width/9 + 3 * ((this.width-2*(this.width/9))/4),
 												this.height - yOffset - this.results[bestDistrIdx].time * ((this.height-2*yOffset)/maxRange),

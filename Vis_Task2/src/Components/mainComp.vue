@@ -96,7 +96,7 @@
 						}
 						var xDelta = Math.abs(platforms[i].x - x);
 						var yDelta = Math.abs(platforms[i].y - y);
-						if (xDelta < platformSize+2 && yDelta < platformSize+2) {
+						if (xDelta < platformSize+5 && yDelta < platformSize+5) {
 							available = false;
 							break;
 						}

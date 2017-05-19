@@ -68,15 +68,15 @@
 			} else {
 				this.randomShapes.forEach((shape, i) => {
 					if (i === random && this.special) {
-						this.paintCircle(shape.x, shape.y, shape.size / 1.5, color, ctx);
+						this.paintCircle(shape.x, shape.y, shape.size / 2, color, ctx);
 					} else {
 
 						switch (i % 4) {
 							case 0:
-								this.paintTriangle(shape.x, shape.y, shape.size / 2, color, ctx);
+								this.paintTriangle(shape.x, shape.y, shape.size / 2, "yellow", ctx);
 								break;
 							case 1:
-								this.paintTriangleUp(shape.x, shape.y, shape.size / 2, color, ctx);
+								this.paintTriangleUp(shape.x, shape.y, shape.size / 2, "green", ctx);
 								break;
 							case 2:
 								this.paintCurve(shape.x, shape.y, shape.size / 2, color, ctx);
@@ -182,7 +182,6 @@
 			ctx.moveTo(x,y);
 			ctx.lineTo(x+size*2,y);
 			ctx.lineTo(x+(size),y+size*2);
-			ctx.lineTo(x,y);
 			ctx.fillStyle = color;
 			ctx.closePath();
 			ctx.fill();
@@ -193,7 +192,6 @@
 			ctx.moveTo(x,y);
 			ctx.lineTo(x+size*2,y);
 			ctx.lineTo(x+(size),y-size*2);
-			ctx.lineTo(x,y);
 			ctx.fillStyle = color;
 			ctx.closePath();
 			ctx.fill();
