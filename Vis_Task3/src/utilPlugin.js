@@ -27,13 +27,14 @@ export default {
 		 * for numbers and property value for string fields]
 		 * @return {Array}[returns filtered data]
 		 */
-		vue.prototype.$filterData = function(data, ...filter) {
+		vue.prototype.$filterData = function(data,filter) {
 			return data.filter((entry, indexEn) => {
 				let toKeep = false;
 				filter.forEach(function(filterElement, index) {
 					let value = entry[filterElement.prop];
-					if (typeof value == "number") {
-
+					let number = parseInt(value);
+					if (!isNaN(number)) {
+						value = number;
 						if (filterElement.min && filterElement.max)
 							toKeep = value > filterElement.min && value < filterElement.max;
 						if (filterElement.min && !filterElement.max)
