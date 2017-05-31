@@ -49,18 +49,19 @@ export default {
   created() {
     this.init();
 
-    var filter2 = {
-      prop: "mpg",
-      min: 15,
-      max: 20
-    };
-    var filter3 = {
-      prop: "manufacturer",
-      value: "ford"
-    };
-    // this.$carsData = this.$formatJson(JsonData);
-    this.displayData = this.$filterData(this.$carsData,[filter2]);
-    // console.log(this.displayData);
+    // var filter2 = {
+    //   prop: "mpg",
+    //   min: 15,
+    //   max: 20
+    // };
+    // var filter3 = {
+    //   prop: "manufacturer",
+    //   value: "ford"
+    // };
+    this.$carsData = this.$formatJson(JsonData);
+    // this.displayData = this.$filterData(this.$carsData,[filter2]);
+
+    
     /**
      * state control
      */
