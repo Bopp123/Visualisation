@@ -21,11 +21,14 @@
 		methods:{
       paintCarMatrix(){
         var ctx = this.$el.firstChild.getContext("2d");
-
+<<<<<<< HEAD
 				ctx.clearRect(0, 0, this.width, this.height);
 				// Background
 				//ctx.fillStyle = "black";
 				//ctx.fillRect(0, 0, this.width, this.height);
+=======
+        ctx.clearRect(0, 0, 600, 600);
+>>>>>>> 228adf5c11c2ecfb07c15a719a41c81c44081a23
 
 				if (this.attributesToShow.length !== 0){
 					var maxMPG = 0;
