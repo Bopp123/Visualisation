@@ -6,7 +6,7 @@
     </div>
     <div class= "main text-center">
         <div class="carMatrix">
-      <carMatrix :displayData="displayData"></carMatrix>
+      <carMatrix :displayData="displayData" :attributesToShow="attributesToShow"></carMatrix>
     </div>
       </div>
       <div class="attriFilter">
@@ -61,7 +61,7 @@ export default {
     this.$carsData = this.$formatJson(JsonData);
     // this.displayData = this.$filterData(this.$carsData,[filter2]);
 
-    
+
     /**
      * state control
      */
@@ -92,12 +92,9 @@ export default {
 }
 
 .carMatrix{
-  width: 400px;
-  height: 400px;
   margin-top: 3%;
   margin-right: 2%;
   margin-left: 2%;
-  border: black solid 1px;
 }
 
 .attriFilter{
