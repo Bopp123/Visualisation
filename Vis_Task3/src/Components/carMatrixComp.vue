@@ -34,24 +34,36 @@
 					var maxHorsepower = 0;
 					var maxWeight = 0;
 					var maxAcceleration = 0;
+					var minMPG = Infinity;
+					var minCylinders = Infinity;
+					var minDisplacement = Infinity;
+					var minHorsepower = Infinity;
+					var minWeight = Infinity;
+					var minAcceleration = Infinity;
           for (var i=0; i<this.displayData.length; i++){
 						if (typeof this.displayData[i].mpg !== "undefined"){
               if (this.displayData[i].mpg > maxMPG) maxMPG = this.displayData[i].mpg;
+							if (this.displayData[i].mpg < minMPG) minMPG = this.displayData[i].mpg;
 						}
 						if (typeof this.displayData[i].cylinders !== "undefined"){
 							if (this.displayData[i].cylinders > maxCylinders) maxCylinders = this.displayData[i].cylinders;
+							if (this.displayData[i].cylinders < minCylinders) minCylinders = this.displayData[i].cylinders;
 						}
 						if (typeof this.displayData[i].displacment !== "undefined"){
-							if (this.displayData[i].displacment > maxDisplacment) maxDisplacment = this.displayData[i].displacment;
+							if (this.displayData[i].displacment > maxDisplacement) maxDisplacement = this.displayData[i].displacment;
+							if (this.displayData[i].displacment < minDisplacement) minDisplacement = this.displayData[i].displacment;
 						}
 						if (typeof this.displayData[i].horsepower !== "undefined"){
 							if (this.displayData[i].horsepower > maxHorsepower) maxHorsepower = this.displayData[i].horsepower;
+							if (this.displayData[i].horsepower < minHorsepower) minHorsepower = this.displayData[i].horsepower;
 						}
 						if (typeof this.displayData[i].weight !== "undefined"){
 							if (this.displayData[i].weight > maxWeight) maxWeight = this.displayData[i].weight;
+							if (this.displayData[i].weight < minWeight) minWeight = this.displayData[i].weight;
 						}
 						if (typeof this.displayData[i].acceleration !== "undefined"){
 							if (this.displayData[i].acceleration > maxAcceleration) maxAcceleration = this.displayData[i].acceleration;
+							if (this.displayData[i].acceleration < minAcceleration) minAcceleration = this.displayData[i].acceleration;
 						}
 					}
 				}
@@ -60,25 +72,33 @@
 				var counter = 0;
         for(var i=0; i<matrixDim; i++){
           for(var j=0; j<matrixDim; j++){
-						for(var k=0; k<=this.attributesToShow.length; k++){
-							ctx.globalAlpha = 0.5;
-							if (this.attributesToShow.length === 1) ctx.globalAlpha = 1; // TODO: opacity ergibt nicht immer gleiche farben, hängt von reihenfolge ab
+						for(var k=0; k<this.attributesToShow.length; k++){
+							//ctx.globalAlpha = 0.5; // TODO: mit / ohne opacity
+							//if (this.attributesToShow.length === 1) ctx.globalAlpha = 1;
 							//if (k !== 0) ctx.globalAlpha = 0.5;
 							switch (this.attributesToShow[k]){
 								case 'mpg':
-									ctx.fillStyle = 'rgb(' + Math.floor(this.displayData[counter].mpg/(maxMPG/100)*2,55) + ', 0, 0)';
+									ctx.fillStyle = 'hsl(30, 100%, ' + ((this.displayData[counter].mpg - minMPG) / (maxMPG - minMPG)) * 255 + '%)';
 									ctx.fillRect(i*this.width/matrixDim, j*this.height/matrixDim, this.width/matrixDim-1, this.height/matrixDim-1);
 									break;
 								case 'cylinders':
-									ctx.fillStyle = 'rgb(0, ' + Math.floor(this.displayData[counter].cylinders/(maxCylinders/100)*2,55) + ', 0)';
+									ctx.fillStyle = 'hsl(60, 100% ' + ((this.displayData[counter].cylinders - minCylinders) / (maxCylinders - minCylinders)) * 255 + '%)';
 									ctx.fillRect(i*this.width/matrixDim, j*this.height/matrixDim, this.width/matrixDim-1, this.height/matrixDim-1);
 									break;
-								case 'displacment':
-									ctx.fillStyle = 'rgb(0, 0,' + Math.floor(this.displayData[counter].displacment/(maxDisplacment/100)*2,55) + ')';
+								case 'displacement':
+									ctx.fillStyle = 'hsl(90, 100%,' + ((this.displayData[counter].displacment - minDisplacement) / (maxDisplacement - minDisplacement)) * 255 + '%)';
+									ctx.fillRect(i*this.width/matrixDim, j*this.height/matrixDim, this.width/matrixDim-1, this.height/matrixDim-1);
+									break;
+								case 'horsepower':
+									ctx.fillStyle = "hsl(120, 100%, " + ((this.displayData[counter].horsepower - minHorsepower) / (maxHorsepower - minHorsepower)) * 255 + "%)";
 									ctx.fillRect(i*this.width/matrixDim, j*this.height/matrixDim, this.width/matrixDim-1, this.height/matrixDim-1);
 									break;
 								case 'weight':
-									ctx.fillStyle = "rgb(0, 0," + Math.floor(this.displayData[counter].weight/(maxWeight/100)*2,55) + ")";
+									ctx.fillStyle = "hsl(150, 100%, " + ((this.displayData[counter].weight - minWeight) / (maxWeight - minWeight)) * 255 + "%)";
+									ctx.fillRect(i*this.width/matrixDim, j*this.height/matrixDim, this.width/matrixDim-1, this.height/matrixDim-1);
+									break;
+								case 'acceleration':
+									ctx.fillStyle = "hsl(180, 100%, " + ((this.displayData[counter].acceleration - minAcceleration) / (maxAcceleration - minAcceleration)) * 255 + "%)";
 									ctx.fillRect(i*this.width/matrixDim, j*this.height/matrixDim, this.width/matrixDim-1, this.height/matrixDim-1);	// TODO: mit oder ohne Abstand?
 									break;
 								//default:
