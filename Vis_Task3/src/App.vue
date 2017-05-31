@@ -4,13 +4,10 @@
     <div class="dataFilter">
       <dataFilter :attributes="attributes" :testObj="$carsData[0]"></dataFilter>
     </div>
-    <div class="carMatrix">
+    <div class= "main text-center">
+        <div class="carMatrix">
       <carMatrix :displayData="displayData"></carMatrix>
     </div>
-    <div class= "main text-center">
-        <div v-for="car in displayData">
-          {{car.car }} {{car.manufacturer }} {{car.mpg }} {{car.weight }} {{car.modelyear }}
-        </div>
       </div>
       <div class="attriFilter">
         <controls :attributes="attributes"></controls>
@@ -106,7 +103,6 @@ export default {
 }
 
 .main{
-  min-width: 50vw;
   margin-right: auto;
   margin-left: auto;
 }

@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="text-center">
   	<canvas id="canvas" width="400" height="400"></canvas>
 	</div>
 </template>
@@ -53,16 +53,7 @@
           }
         }
       },
-
-      mounted(){
-        this.paintCarMatrix();
-      }/*,
-      watch: {
-        displayData: function() {
-          eventBus.$emit('filterChanged', this.filters);
-          //console.log(this.filters);
-        }
-      }*/
+      
       /*,
       directives: {
       },
@@ -73,7 +64,17 @@
           this.paintCarMatrix();
         }
       }*/
-    }
+    },
+    watch: {
+        displayData: function() {
+          eventBus.$emit('filterChanged', this.filters);
+          //console.log(this.filters);
+        }
+      },
+    mounted(){
+        this.paintCarMatrix();
+      }
+
   }
 </script>
 
