@@ -116,6 +116,9 @@
     watch: {
         displayData: function() {
           this.paintCarMatrix();
+        },
+        attributesToShow: function() {
+          this.paintCarMatrix();
         }
       },
     mounted(){
