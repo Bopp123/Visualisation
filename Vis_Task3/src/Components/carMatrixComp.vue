@@ -62,7 +62,7 @@
           for(var j=0; j<matrixDim; j++){
 						for(var k=0; k<=this.attributesToShow.length; k++){
 							ctx.globalAlpha = 0.5;
-							if (this.attributesToShow.length === 1) ctx.globalAlpha = 1; // TODO: opacity ergibt nicht immer gleiche farben, hängt von reihenfolge ab
+							// if (this.attributesToShow.length === 1) ctx.globalAlpha = 1; // TODO: opacity ergibt nicht immer gleiche farben, hängt von reihenfolge ab
 							//if (k !== 0) ctx.globalAlpha = 0.5;
 							switch (this.attributesToShow[k]){
 								case 'mpg':
@@ -95,6 +95,9 @@
     },
     watch: {
         displayData: function() {
+          this.paintCarMatrix();
+        },
+        attributesToShow: function() {
           this.paintCarMatrix();
         }
       },

@@ -2,8 +2,8 @@
   <div class="inline attriMain">
     <h2>Choose Attributes</h2>
     <div v-for="attr in attributes" class="attri flex">
-      <input type="checkbox" id="attr" value="attr" @change="attributeChanged(attr)">
-      <label for="attr">{{attr}}</label>
+      <input v-if="attr !== 'car' && attr !== 'manufacturer' && attr !== 'origin' && attr !== 'car'" type="checkbox" id="attr" value="attr" @change="attributeChanged(attr)">
+      <label v-if="attr !== 'car' && attr !== 'manufacturer' && attr !== 'origin' && attr !== 'car'"for="attr">{{attr}}</label>
     </div>
   </div>
 </template>
