@@ -4,6 +4,9 @@
     <div class="dataFilter">
       <dataFilter :attributes="attributes" :testObj="$carsData[0]"></dataFilter>
     </div>
+    <div class="carMatrix">
+      <carMatrix :displayData="displayData"></carMatrix>
+    </div>
     <div class= "main text-center">
         <div v-for="car in displayData">
           {{car.car }} {{car.manufacturer }} {{car.mpg }} {{car.weight }} {{car.modelyear }}
@@ -20,14 +23,14 @@
 import JsonData from '../cars.json';
 import Controls from './components/attributeControlComp.vue';
 import Filter from './components/filterComp.vue';
-import {
-  eventBus
-} from "./main";
+import CarMatrix from './components/carMatrixComp.vue';
+import {eventBus} from "./main";
 export default {
   name: 'app',
   components: {
     controls: Controls,
-    dataFilter: Filter
+    dataFilter: Filter,
+    carMatrix: CarMatrix
   },
   data() {
     return {
@@ -39,7 +42,7 @@ export default {
   methods: {
     init() {
       this.$carsData = this.$formatJson(JsonData);
-      this.displayData = this.$carsData; 
+      this.displayData = this.$carsData;
 
       for (let variable in this.$carsData[0]) {
         this.attributes.push(variable);
@@ -48,7 +51,7 @@ export default {
   },
   created() {
     this.init();
-  
+
     var filter2 = {
       prop: "mpg",
       min: 15,
@@ -88,6 +91,15 @@ export default {
 
 .flex{
   display: flex;
+}
+
+.carMatrix{
+  width: 400px;
+  height: 400px;
+  margin-top: 3%;
+  margin-right: 2%;
+  margin-left: 2%;
+  border: black solid 1px;
 }
 
 .attriFilter{
