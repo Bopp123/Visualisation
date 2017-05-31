@@ -67,8 +67,7 @@
     },
     watch: {
         displayData: function() {
-          eventBus.$emit('filterChanged', this.filters);
-          //console.log(this.filters);
+         this.paintCarMatrix();
         }
       },
     mounted(){
