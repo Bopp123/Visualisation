@@ -20,6 +20,7 @@
         //var canvas1 = document.getElementById("canvas");
         //var ctx = canvas1.getContext("2d");
         var ctx = this.$el.firstChild.getContext("2d");
+        ctx.clearRect(0, 0, 600, 600);
 
         // test purpose
         ctx.fillStyle = "green";
@@ -67,7 +68,7 @@
     },
     watch: {
         displayData: function() {
-         this.paintCarMatrix();
+          this.paintCarMatrix();
         }
       },
     mounted(){
