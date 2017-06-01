@@ -1,5 +1,5 @@
 <template>
-  <div>  
+  <div class="mainFilter">  
     <h2>Filter Data</h2>
     <div class="flex newFilter">
       <select v-model="selected">
@@ -50,6 +50,7 @@ export default {
     },
     methods: {
       addFilter() {
+        if(this.selected === "") return;
         let filter = {};
         filter.prop = this.selected;
         if (this.selectedAttriTypeOfNumber) {
@@ -98,6 +99,12 @@ input{
 }
 
 .newFilter{
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid black;
+}
+
+.mainFilter{
   margin-bottom: 20px;
   padding-bottom: 10px;
   border-bottom: 1px solid black;

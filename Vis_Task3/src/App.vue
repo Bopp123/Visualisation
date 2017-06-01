@@ -3,6 +3,7 @@
   <div class="flex">
     <div class="dataFilter">
       <dataFilter :attributes="attributes" :testObj="$carsData[0]"></dataFilter>
+      <detailsComp></detailsComp>
     </div>
     <div class= "main text-center">
         <div class="carMatrix">
@@ -19,6 +20,7 @@
 <script>
 import JsonData from '../cars.json';
 import Controls from './components/attributeControlComp.vue';
+import Details from './components/carDetailsComp.vue';
 import Filter from './components/filterComp.vue';
 import CarMatrix from './components/carMatrixComp.vue';
 import {eventBus} from "./main";
@@ -27,7 +29,8 @@ export default {
   components: {
     controls: Controls,
     dataFilter: Filter,
-    carMatrix: CarMatrix
+    carMatrix: CarMatrix,
+    detailsComp: Details
   },
   data() {
     return {
@@ -48,16 +51,6 @@ export default {
   },
   created() {
     this.init();
-
-    // var filter2 = {
-    //   prop: "mpg",
-    //   min: 15,
-    //   max: 20
-    // };
-    // var filter3 = {
-    //   prop: "manufacturer",
-    //   value: "ford"
-    // };
     this.$carsData = this.$formatJson(JsonData);
     // this.displayData = this.$filterData(this.$carsData,[filter2]);
 
@@ -97,7 +90,8 @@ export default {
   margin-left: 2%;
 }
 
-.attriFilter{
+.dataFilter{
+  width: 25%;
 }
 
 .main{

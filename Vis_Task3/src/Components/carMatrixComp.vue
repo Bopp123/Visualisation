@@ -1,15 +1,16 @@
 <template>
 	<div class="text-center">
-  	<canvas id="canvas" width="800" height="800" @click="getCarInfo()"></canvas>
+  	<canvas id="canvas" width="600" height="600" @click="getCarInfo"></canvas>
 	</div>
 </template>
 
 <script>
+import {eventBus} from "../main";
 	export default {
 	   data: function () {
 			return {
-				width: 800,
-				height: 800,
+				width: 600,
+				height: 600,
 				matrixDim: 0
 			}
 		},
@@ -23,9 +24,10 @@
 		getCarInfo() {
 			const x = event.layerX;
 			const y = event.layerY;
-			const tileSize = this.width/this.matrixDim;
-			const index = ((Math.ceil(y/tileSize)-1)*tileSize)+(Math.ceil(x/tileSize));
+			const tileSize = (this.width/this.matrixDim)+1;
+			const index = ((Math.ceil(y/tileSize)-1)*this.matrixDim)+(Math.ceil(x/tileSize));
 			console.log(index);
+			eventBus.$emit('carClicked', this.displayData[index-1]);
 		},
       paintCarMatrix(){
         var ctx = this.$el.firstChild.getContext("2d");
@@ -92,7 +94,7 @@
 									var v = ((this.displayData[counter].mpg - minMPG) / (maxMPG - minMPG));
 									
 									console.log(v);
-									ctx.fillStyle = 'hsl(30, 100%, ' + v * 100 + '%)';
+									ctx.fillStyle = 'hsl(30, 100%, ' + (v*100) + '%)';
 									ctx.fillRect(i*this.width/matrixDim, j*this.height/matrixDim, this.width/matrixDim-1, this.height/matrixDim-1);
 									break;
 								case 'cylinders':
@@ -127,7 +129,7 @@
           }
         }
 				// TODO: Legende
-      },
+      }
     },
     watch: {
         displayData: function() {
