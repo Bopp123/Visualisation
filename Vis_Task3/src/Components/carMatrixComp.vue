@@ -50,8 +50,10 @@ import {eventBus} from "../main";
 					var minHorsepower = Infinity;
 					var minWeight = Infinity;
 					var minAcceleration = Infinity;
+
           for (var i=0; i<this.displayData.length; i++){
           				var mpg = Number.parseInt(this.displayData[i].mpg);
+          				var horsepower = Number.parseInt(this.displayData[i].horsepower);
 						if (!isNaN(mpg)){
               				if (mpg > maxMPG) maxMPG = mpg;
 							if (mpg < minMPG) minMPG = mpg;
@@ -64,9 +66,9 @@ import {eventBus} from "../main";
 							if (this.displayData[i].displacment > maxDisplacement) maxDisplacement = this.displayData[i].displacment;
 							if (this.displayData[i].displacment < minDisplacement) minDisplacement = this.displayData[i].displacment;
 						}
-						if (typeof this.displayData[i].horsepower !== "undefined"){
-							if (this.displayData[i].horsepower > maxHorsepower) maxHorsepower = this.displayData[i].horsepower;
-							if (this.displayData[i].horsepower < minHorsepower) minHorsepower = this.displayData[i].horsepower;
+						if (!isNaN(horsepower)){
+              				if (horsepower > maxHorsepower) maxHorsepower = horsepower;
+							if (horsepower < minHorsepower) minHorsepower = horsepower;
 						}
 						if (typeof this.displayData[i].weight !== "undefined"){
 							if (this.displayData[i].weight > maxWeight) maxWeight = this.displayData[i].weight;
@@ -80,6 +82,7 @@ import {eventBus} from "../main";
 				}
 
         var matrixDim = Math.floor(Math.sqrt(this.displayData.length));
+        var tileSize = this.width/matrixDim;
         this.matrixDim = matrixDim; 
         // TODO: nachkommastellen, zZ geschummelt
 				var counter = 0;
@@ -87,27 +90,29 @@ import {eventBus} from "../main";
           for(var j=0; j<matrixDim; j++){
 						for(var k=0; k<this.attributesToShow.length; k++){
 							//ctx.globalAlpha = 0.5; // TODO: mit / ohne opacity
-							//if (this.attributesToShow.length === 1) ctx.globalAlpha = 1;
+							var alpha = 1;
+							if (this.attributesToShow.length !== 1) alpha = 0.5;
 							//if (k !== 0) ctx.globalAlpha = 0.5;
 							switch (this.attributesToShow[k]){
 								case 'mpg':
-									var v = ((this.displayData[counter].mpg - minMPG) / (maxMPG - minMPG));
-									
-									console.log(v);
-									ctx.fillStyle = 'hsl(30, 100%, ' + (v*100) + '%)';
-									ctx.fillRect(i*this.width/matrixDim, j*this.height/matrixDim, this.width/matrixDim-1, this.height/matrixDim-1);
+									var v = ((this.displayData[counter].mpg - minMPG) / (maxMPG - minMPG))*100;
+									console.log(counter,"   ",v, "  mpg: " + this.displayData[counter].mpg);
+									ctx.fillStyle = 'hsla(60, 100%, ' + v + '%,'+ alpha + ')';
+									ctx.fillRect(j*(tileSize), i*(tileSize), tileSize-1, tileSize-1);
 									break;
 								case 'cylinders':
 									ctx.fillStyle = 'hsl(60, 100% ' + ((this.displayData[counter].cylinders - minCylinders) / (maxCylinders - minCylinders)) * 255 + '%)';
-									ctx.fillRect(i*this.width/matrixDim, j*this.height/matrixDim, this.width/matrixDim-1, this.height/matrixDim-1);
+									ctx.fillRect(j*this.width/matrixDim, j*this.height/matrixDim, this.width/matrixDim-1, this.height/matrixDim-1);
 									break;
 								case 'displacement':
 									ctx.fillStyle = 'hsl(90, 100%,' + ((this.displayData[counter].displacment - minDisplacement) / (maxDisplacement - minDisplacement)) * 255 + '%)';
 									ctx.fillRect(i*this.width/matrixDim, j*this.height/matrixDim, this.width/matrixDim-1, this.height/matrixDim-1);
 									break;
 								case 'horsepower':
-									ctx.fillStyle = "hsl(120, 100%, " + ((this.displayData[counter].horsepower - minHorsepower) / (maxHorsepower - minHorsepower)) * 255 + "%)";
-									ctx.fillRect(i*this.width/matrixDim, j*this.height/matrixDim, this.width/matrixDim-1, this.height/matrixDim-1);
+									var v = ((this.displayData[counter].horsepower - minHorsepower) / (maxHorsepower - minHorsepower))*100;
+									console.log(counter,"   ",v, "  mpg: " + this.displayData[counter].horsepower);
+									ctx.fillStyle = 'hsla(240, 100%, ' + (100-v) + '%,'+ alpha + ')';
+									ctx.fillRect(j*(tileSize), i*(tileSize), tileSize-1, tileSize-1);
 									break;
 								case 'weight':
 									var v = ((this.displayData[counter].weight - minWeight) / (maxWeight - minWeight));
