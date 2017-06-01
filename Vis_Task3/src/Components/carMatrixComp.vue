@@ -1,6 +1,6 @@
 <template>
 	<div class="text-center">
-  	<canvas id="canvas" width="800" height="800"></canvas>
+  	<canvas id="canvas" width="800" height="800" @click="getCarInfo()"></canvas>
 	</div>
 </template>
 
@@ -9,7 +9,8 @@
 	   data: function () {
 			return {
 				width: 800,
-				height: 800
+				height: 800,
+				matrixDim: 0
 			}
 		},
 
@@ -19,6 +20,13 @@
 		},
 
 		methods:{
+		getCarInfo() {
+			const x = event.layerX;
+			const y = event.layerY;
+			const tileSize = this.width/this.matrixDim;
+			const index = ((Math.ceil(y/tileSize)-1)*tileSize)+(Math.ceil(x/tileSize));
+			console.log(index);
+		},
       paintCarMatrix(){
         var ctx = this.$el.firstChild.getContext("2d");
 
@@ -69,7 +77,9 @@
 					}
 				}
 
-        var matrixDim = Math.floor(Math.sqrt(this.displayData.length)); // TODO: nachkommastellen, zZ geschummelt
+        var matrixDim = Math.floor(Math.sqrt(this.displayData.length));
+        this.matrixDim = matrixDim; 
+        // TODO: nachkommastellen, zZ geschummelt
 				var counter = 0;
         for(var i=0; i<matrixDim; i++){
           for(var j=0; j<matrixDim; j++){
@@ -80,7 +90,7 @@
 							switch (this.attributesToShow[k]){
 								case 'mpg':
 									var v = ((this.displayData[counter].mpg - minMPG) / (maxMPG - minMPG));
-									debugger;
+									
 									console.log(v);
 									ctx.fillStyle = 'hsl(30, 100%, ' + v * 100 + '%)';
 									ctx.fillRect(i*this.width/matrixDim, j*this.height/matrixDim, this.width/matrixDim-1, this.height/matrixDim-1);
