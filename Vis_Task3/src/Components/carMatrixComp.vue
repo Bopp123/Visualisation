@@ -41,11 +41,12 @@
 					var minWeight = Infinity;
 					var minAcceleration = Infinity;
           for (var i=0; i<this.displayData.length; i++){
-						if (typeof this.displayData[i].mpg !== "undefined"){
-              if (this.displayData[i].mpg > maxMPG) maxMPG = this.displayData[i].mpg;
-							if (this.displayData[i].mpg < minMPG) minMPG = this.displayData[i].mpg;
+          				var mpg = Number.parseInt(this.displayData[i].mpg);
+						if (!isNaN(mpg)){
+              				if (mpg > maxMPG) maxMPG = mpg;
+							if (mpg < minMPG) minMPG = mpg;
 						}
-						if (typeof this.displayData[i].cylinders !== "undefined"){
+						if (typeof this.displayData[i].cylinders !== "undefined" && this.displayData[i].cylinders !== "NA"){
 							if (this.displayData[i].cylinders > maxCylinders) maxCylinders = this.displayData[i].cylinders;
 							if (this.displayData[i].cylinders < minCylinders) minCylinders = this.displayData[i].cylinders;
 						}
@@ -78,7 +79,10 @@
 							//if (k !== 0) ctx.globalAlpha = 0.5;
 							switch (this.attributesToShow[k]){
 								case 'mpg':
-									ctx.fillStyle = 'hsl(30, 100%, ' + ((this.displayData[counter].mpg - minMPG) / (maxMPG - minMPG)) * 255 + '%)';
+									var v = ((this.displayData[counter].mpg - minMPG) / (maxMPG - minMPG));
+									debugger;
+									console.log(v);
+									ctx.fillStyle = 'hsl(30, 100%, ' + v * 100 + '%)';
 									ctx.fillRect(i*this.width/matrixDim, j*this.height/matrixDim, this.width/matrixDim-1, this.height/matrixDim-1);
 									break;
 								case 'cylinders':
@@ -94,7 +98,9 @@
 									ctx.fillRect(i*this.width/matrixDim, j*this.height/matrixDim, this.width/matrixDim-1, this.height/matrixDim-1);
 									break;
 								case 'weight':
-									ctx.fillStyle = "hsl(150, 100%, " + ((this.displayData[counter].weight - minWeight) / (maxWeight - minWeight)) * 255 + "%)";
+									var v = ((this.displayData[counter].weight - minWeight) / (maxWeight - minWeight));
+									
+									ctx.fillStyle = "hsl(150, 100%, " + v* 100 + "%)";
 									ctx.fillRect(i*this.width/matrixDim, j*this.height/matrixDim, this.width/matrixDim-1, this.height/matrixDim-1);
 									break;
 								case 'acceleration':
