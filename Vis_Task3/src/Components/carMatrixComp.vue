@@ -67,14 +67,14 @@ import {eventBus} from "../main";
           for (var i=0; i<this.displayData.length; i++){
           				var mpg = Number.parseInt(this.displayData[i].mpg);
 									var displacement = Number.parseInt(this.displayData[i].displacement);
-          				var horsepower = Number.parseInt(this.displayData[i].horsepower);
+					var horsepower = Number.parseInt(this.displayData[i].horsepower);
 
-						if (!isNaN(mpg)){
-              if (mpg > maxMPG) maxMPG = mpg;
-							if (mpg < minMPG) minMPG = mpg;
-						}
+					if (!isNaN(mpg)) {
+						if (mpg > maxMPG) maxMPG = mpg;
+						if (mpg < minMPG) minMPG = mpg;
+					}
 
-						if (!isNaN(displacement)){
+						if (!isNaN(displacement)){3
 							if (displacement > maxDisplacement) maxDisplacement = displacement;
 							if (displacement < minDisplacement) minDisplacement = displacement;
 						}
@@ -116,19 +116,25 @@ import {eventBus} from "../main";
 						for(var k=0; k<this.attributesToShow.length; k++){
 							//ctx.globalAlpha = 0.5; // TODO: mit / ohne opacity
 							var alpha = 1;
-							if (this.attributesToShow.length !== 1) alpha = 0.5;
+							
+							var h = 60;
+							if (this.attributesToShow.length !== 1) {
+								// alpha = alpha/this.attributesToShow.length;
+								ctx.globalCompositeOperation = "exclusion";
+								var h = 240;
+							}
 							//if (k !== 0) ctx.globalAlpha = 0.5;
 							switch (this.attributesToShow[k]){
 								case 'mpg':
 									var v = ((this.displayData[counter].mpg - minMPG) / (maxMPG - minMPG))*100;
 									console.log(counter,"   ",v, "  mpg: " + this.displayData[counter].mpg);
-									ctx.fillStyle = 'hsla(60, 100%, ' + v + '%,'+ alpha + ')';
+									ctx.fillStyle = 'hsla(' + h  +', 100%, ' + v + '%,'+ alpha + ')';
 									ctx.fillRect(j*(tileSize), i*(tileSize), tileSize-1, tileSize-1);
 									break;
 								case 'cylinders':
 									var v = ((this.displayData[counter].cylinders - minCylinders) / (maxCylinders - minCylinders))*100;
 									console.log(counter,"   ",v, "  cylinders: " + this.displayData[counter].cylinders);
-									ctx.fillStyle = 'hsla(90, 100%, ' + v + '%,'+ alpha + ')';
+									ctx.fillStyle = 'hsla(' + h  +', 100%, ' + v + '%,'+ alpha + ')';
 									ctx.fillRect(j*(tileSize), i*(tileSize), tileSize-1, tileSize-1);
 									//ctx.fillStyle = 'hsla(60, 100% ' + ((this.displayData[counter].cylinders - minCylinders) / (maxCylinders - minCylinders)) * 255 + '%)';
 								//	ctx.fillRect(j*this.width/matrixDim, j*this.height/matrixDim, this.width/matrixDim-1, this.height/matrixDim-1);
@@ -136,7 +142,7 @@ import {eventBus} from "../main";
 								case 'displacement':
 									var v = ((this.displayData[counter].displacement - minDisplacement) / (maxDisplacement - minDisplacement))*100;
 									console.log(counter,"   ",v, "  displacement: " + this.displayData[counter].displacement);
-									ctx.fillStyle = 'hsla(120, 100%, ' + v + '%,'+ alpha + ')';
+									ctx.fillStyle = 'hsla(' + h  +', 100%, ' + (100-v) + '%,'+ alpha + ')';
 									ctx.fillRect(j*(tileSize), i*(tileSize), tileSize-1, tileSize-1);
 									//ctx.fillStyle = 'hsl(90, 100%,' + ((this.displayData[counter].displacment - minDisplacement) / (maxDisplacement - minDisplacement)) * 255 + '%)';
 									//ctx.fillRect(i*this.width/matrixDim, j*this.height/matrixDim, this.width/matrixDim-1, this.height/matrixDim-1);
@@ -144,13 +150,13 @@ import {eventBus} from "../main";
 								case 'horsepower':
 									var v = ((this.displayData[counter].horsepower - minHorsepower) / (maxHorsepower - minHorsepower))*100;
 									console.log(counter,"   ",v, "  horsepower: " + this.displayData[counter].horsepower);
-									ctx.fillStyle = 'hsla(150, 100%, ' + (100-v) + '%,'+ alpha + ')';
+									ctx.fillStyle = 'hsla(' + h  +', 100%, ' + (100-v) + '%,'+ alpha + ')';
 									ctx.fillRect(j*(tileSize), i*(tileSize), tileSize-1, tileSize-1);
 									break;
 								case 'weight':
 									var v = ((this.displayData[counter].weight - minWeight) / (maxWeight - minWeight))*100;
 									console.log(counter,"   ",v, "  weight: " + this.displayData[counter].weight);
-									ctx.fillStyle = 'hsla(180, 100%, ' + (100-v) + '%,'+ alpha + ')';
+									ctx.fillStyle = 'hsla(' + h  +', 100%, ' + (100-v) + '%,'+ alpha + ')';
 									ctx.fillRect(j*(tileSize), i*(tileSize), tileSize-1, tileSize-1);
 									//var v = ((this.displayData[counter].weight - minWeight) / (maxWeight - minWeight));
 									//ctx.fillStyle = "hsl(150, 100%, " + v* 100 + "%)";
@@ -159,7 +165,7 @@ import {eventBus} from "../main";
 								case 'acceleration':
 									var v = ((this.displayData[counter].acceleration - minAcceleration) / (maxAcceleration - minAcceleration))*100;
 									console.log(counter,"   ",v, "  acceleration: " + this.displayData[counter].acceleration);
-									ctx.fillStyle = 'hsla(210, 100%, ' + (100-v) + '%,'+ alpha + ')';
+									ctx.fillStyle = 'hsla(' + h  +', 100%, ' + (100-v) + '%,'+ alpha + ')';
 									ctx.fillRect(j*(tileSize), i*(tileSize), tileSize-1, tileSize-1);
 									//ctx.fillStyle = "hsl(180, 100%, " + ((this.displayData[counter].acceleration - minAcceleration) / (maxAcceleration - minAcceleration)) * 255 + "%)";
 									//ctx.fillRect(i*this.width/matrixDim, j*this.height/matrixDim, this.width/matrixDim-1, this.height/matrixDim-1);	// TODO: mit oder ohne Abstand?
@@ -167,7 +173,7 @@ import {eventBus} from "../main";
 								case 'modelyear':
 									var v = ((this.displayData[counter].modelyear - minModelyear) / (maxModelyear - minModelyear))*100;
 									console.log(counter,"   ",v, "  modelyear: " + this.displayData[counter].modelyear);
-									ctx.fillStyle = 'hsla(240, 100%, ' + (100-v) + '%,'+ alpha + ')';
+									ctx.fillStyle = 'hsla(' + h  +', 100%, ' + (100-v) + '%,'+ alpha + ')';
 									ctx.fillRect(j*(tileSize), i*(tileSize), tileSize-1, tileSize-1);
 									break;
 								//default:
