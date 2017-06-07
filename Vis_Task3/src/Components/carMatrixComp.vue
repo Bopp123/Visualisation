@@ -45,14 +45,13 @@
                 var ctx = canvas.getContext("2d");
                 var canvas2 = document.getElementById("canvas2");
                 var ctx2 = canvas2.getContext("2d");
-                //var ctx = this.$el.firstChild.getContext("2d");
-                //var ctx2 = this.$el.secondChild.getContext("2d");
 
                 ctx.clearRect(0, 0, this.width, this.height);
+                ctx2.clearRect(0, 0, this.width, this.height);
                 if(this.attributesToShow.length == 0) return;
                 // Background
-                //ctx.fillStyle = "black";
-                //ctx.fillRect(0, 0, this.width, this.height);
+                ctx.fillStyle = "black";
+                ctx.fillRect(0, 0, this.width, this.height);
 
                 if (this.attributesToShow.length !== 0) {
                     var maxMPG = 0;
@@ -115,8 +114,14 @@
                 var matrixDim = Math.floor(Math.sqrt(this.displayData.length));
                 var tileSize = this.width / matrixDim;
                 this.matrixDim = matrixDim;
-                // TODO: nachkommastellen, zZ geschummelt
+                // TODO: nachkommastellen
                 var counter = 0;
+                var hMax = 0;
+                var vMax = 0;
+                var hMin = Infinity;
+                var vMin = Infinity;
+                var vMid = 0;
+                var hMid = 0;
                 for (var i = 0; i < matrixDim; i++) {
                     for (var j = 0; j < matrixDim; j++) {
                         var alpha = 1;
@@ -139,22 +144,22 @@
                                 case 'cylinders':
                                     var normed = this.norm(this.displayData[counter].cylinders, minCylinders, maxCylinders);
                                     hArray.push(h*normed);
-                                    v += 120 - ( normed* 100);
+                                    v += ( normed* 100);
                                     break;
                                 case 'displacement':
                                     var normed = this.norm(this.displayData[counter].displacement, minDisplacement, maxDisplacement);
                                     hArray.push(h*normed);
-                                    v += 120 - ( normed* 100);
+                                    v += ( normed* 100);
                                     break;
                                 case 'horsepower':
                                     var normed = this.norm(this.displayData[counter].horsepower, minHorsepower, maxHorsepower);
                                     hArray.push(h*normed);
-                                    v += 120 - ( normed* 100);
+                                    v += ( normed* 100);
                                     break;
                                 case 'weight':
                                     var normed = this.norm(this.displayData[counter].weight, minWeight, maxWeight);
                                     hArray.push(h*normed);
-                                    v += 120 - ( normed* 100);
+                                    v += ( normed* 100);
                                     break;
                                 case 'acceleration':
                                     var normed = this.norm(this.displayData[counter].acceleration, minAcceleration, maxAcceleration);
@@ -164,7 +169,7 @@
                                 case 'modelyear':
                                     var normed = this.norm(this.displayData[counter].modelyear, minModelyear, maxModelyear);
                                     hArray.push(h*normed);
-                                    v += 120 - ( normed* 100);
+                                    v += ( normed* 100);
                                     break;
                             }
 
@@ -178,17 +183,39 @@
                         ctx.fillStyle = 'hsla(' + h + ', 100%, ' + v + '%,' + alpha + ')';
                         ctx.fillRect(j * (tileSize), i * (tileSize), tileSize - 1, tileSize - 1);
                         counter += 1;
+
+                        hMid += h;
+                        vMid += v;
+                        if (h > hMax){
+                          hMax = h;
+                          vMax = v;
+                        }
+                        if (h < hMin){
+                          hMin = h;
+                          vMin = v;
+                        }
                     }
                 }
                 // TODO: Legende
-                //var v = ((this.displayData[counter].weight - minWeight) / (maxWeight - minWeight))*100;
-                //String = 'hsla(150, 100%, ' + (100-v) + '%,'+ alpha + ')';
-                //hsl(240)
-                var grd = ctx2.createLinearGradient(0, 0, 300, 0);
-                grd.addColorStop(0, "black");
-                grd.addColorStop(1, "white");
+                hMid /= counter;
+                vMid /= counter;
+                var grd = ctx2.createLinearGradient(50, 0, 550, 0);
+                grd.addColorStop(0, 'hsla(' + hMax + ', 100%, ' + vMax + '%,' + 1 + ')');
+                if (!isNaN(hMid) && !isNaN(vMid)) {
+                  grd.addColorStop(0.5, 'hsla(' + hMid + ', 100%, ' + vMid + '%,' + 1 + ')'); //TODO: not sure why values are sometimes NaN
+                  grd.addColorStop(1, 'hsla(' + hMin + ', 100%, ' + vMin + '%,' + 1 + ')');
+                } else {
+                  grd.addColorStop(1, 'hsla(' + hMin + ', 100%, ' + vMin + '%,' + 1 + ')');
+                  console.log("only 2x Gradients...");
+                }
                 ctx2.fillStyle = grd;
-                ctx2.fillRect(0, 0, 300, 20);
+                ctx2.fillRect(0, 0, 600, 25);
+                ctx2.fillStyle = "black";
+                ctx2.font  = "14px Georgia";
+                ctx2.textAlign = "left";
+                ctx2.fillText("more", 0, 40); //TODO: legende for mpg not correct
+                ctx2.textAlign = "right";
+                ctx2.fillText("less", 600, 40);
             }
 
         },
