@@ -36,7 +36,7 @@
             },
 
             norm(x, min, max){
-                return ((0.7 * (x - min)) / (max - min)) + 0.3;
+                return ((0.6 * (x - min)) / (max - min)) + 0.3;
             },
 
             paintCarMatrix(){
@@ -142,12 +142,12 @@
                                     v += 120 - ( normed* 100);
                                     break;
                                 case 'displacement':
-                                    var normed = (this.displayData[counter].displacement - minDisplacement) / (maxDisplacement - minDisplacement);
+                                    var normed = this.norm(this.displayData[counter].displacement, minDisplacement, maxDisplacement);
                                     hArray.push(h*normed);
                                     v += 120 - ( normed* 100);
                                     break;
                                 case 'horsepower':
-                                    var normed = (this.displayData[counter].horsepower - minHorsepower) / (maxHorsepower - minHorsepower);
+                                    var normed = this.norm(this.displayData[counter].horsepower, minHorsepower, maxHorsepower);
                                     hArray.push(h*normed);
                                     v += 120 - ( normed* 100);
                                     break;
@@ -162,7 +162,7 @@
                                     v += ( normed* 100);
                                     break;
                                 case 'modelyear':
-                                    var normed = (this.displayData[counter].modelyear - minModelyear) / (maxModelyear - minModelyear);
+                                    var normed = this.norm(this.displayData[counter].modelyear, minModelyear, maxModelyear);
                                     hArray.push(h*normed);
                                     v += 120 - ( normed* 100);
                                     break;
