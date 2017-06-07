@@ -144,22 +144,22 @@
                                 case 'cylinders':
                                     var normed = this.norm(this.displayData[counter].cylinders, minCylinders, maxCylinders);
                                     hArray.push(h*normed);
-                                    v += ( normed* 100);
+                                    v += 120-( normed* 100);
                                     break;
                                 case 'displacement':
                                     var normed = this.norm(this.displayData[counter].displacement, minDisplacement, maxDisplacement);
                                     hArray.push(h*normed);
-                                    v += ( normed* 100);
+                                    v += 120-( normed* 100);
                                     break;
                                 case 'horsepower':
                                     var normed = this.norm(this.displayData[counter].horsepower, minHorsepower, maxHorsepower);
                                     hArray.push(h*normed);
-                                    v += ( normed* 100);
+                                    v += 120-( normed* 100);
                                     break;
                                 case 'weight':
                                     var normed = this.norm(this.displayData[counter].weight, minWeight, maxWeight);
                                     hArray.push(h*normed);
-                                    v += ( normed* 100);
+                                    v += 120-( normed* 100);
                                     break;
                                 case 'acceleration':
                                     var normed = this.norm(this.displayData[counter].acceleration, minAcceleration, maxAcceleration);
@@ -169,7 +169,7 @@
                                 case 'modelyear':
                                     var normed = this.norm(this.displayData[counter].modelyear, minModelyear, maxModelyear);
                                     hArray.push(h*normed);
-                                    v += ( normed* 100);
+                                    v += 120-( normed* 100);
                                     break;
                             }
 
