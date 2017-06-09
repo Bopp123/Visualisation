@@ -16,7 +16,9 @@
             return {
                 width: 600,
                 height: 600,
-                matrixDim: 0
+                matrixDim: 0,
+                xSelect: 0,
+                ySelect: 0
             }
         },
 
@@ -31,6 +33,16 @@
                 const y = event.layerY;
                 const tileSize = (this.width / this.matrixDim) + 1;
                 const index = ((Math.ceil(y / tileSize) - 1) * this.matrixDim) + (Math.ceil(x / tileSize));
+
+                this.xSelect = x;
+                this.ySelect = y;
+                var canvas = document.getElementById("canvas");
+                var ctx = canvas.getContext("2d");
+                ctx.strokeStyle = "red";
+                ctx.lineWidth = 2;
+                //ctx.strokeRect(x-tileSize/2, y-tileSize/2, tileSize, tileSize);
+                ctx.strokeRect(this.xSelect-this.xSelect%tileSize, this.ySelect - this.ySelect%tileSize, tileSize, tileSize);
+
                 console.log(index);
                 eventBus.$emit('carClicked', this.displayData[index - 1]);
             },
@@ -216,6 +228,11 @@
                 ctx2.fillText("more", 0, 40); //TODO: legende for mpg not correct
                 ctx2.textAlign = "right";
                 ctx2.fillText("less", 600, 40);
+
+                ctx.strokeStyle = "red";
+                ctx.lineWidth = 2;
+                //ctx.strokeRect(this.xSelect-tileSize/2, this.ySelect-tileSize/2, tileSize, tileSize);
+                ctx.strokeRect(this.xSelect-this.xSelect%tileSize, this.ySelect - this.ySelect%tileSize, tileSize, tileSize);
             }
 
         },
