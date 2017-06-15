@@ -17,8 +17,6 @@
                 width: 600,
                 height: 600,
                 matrixDim: 0,
-                xSelect: 0,
-                ySelect: 0
             }
         },
 
@@ -31,18 +29,8 @@
             getCarInfo() {
                 const x = event.layerX;
                 const y = event.layerY;
-                const tileSize = (this.width / this.matrixDim) + 1;
+                const tileSize = (this.width / this.matrixDim);
                 const index = ((Math.ceil(y / tileSize) - 1) * this.matrixDim) + (Math.ceil(x / tileSize));
-
-                this.xSelect = x;
-                this.ySelect = y;
-                var canvas = document.getElementById("canvas");
-                var ctx = canvas.getContext("2d");
-                ctx.strokeStyle = "red";
-                ctx.lineWidth = 2;
-                //ctx.strokeRect(x-tileSize/2, y-tileSize/2, tileSize, tileSize);
-                ctx.strokeRect(this.xSelect-this.xSelect%tileSize, this.ySelect - this.ySelect%tileSize, tileSize, tileSize);
-
                 console.log(index);
                 eventBus.$emit('carClicked', this.displayData[index - 1]);
             },
@@ -211,9 +199,11 @@
                 // TODO: Legende
                 hMid /= counter;
                 vMid /= counter;
+                hMax = hMax > 360 ? 360: hMax;
+                vMax = vMax > 100 ? 100: vMax;
                 var grd = ctx2.createLinearGradient(50, 0, 550, 0);
                 grd.addColorStop(0, 'hsla(' + hMax + ', 100%, ' + vMax + '%,' + 1 + ')');
-                if (!isNaN(hMid) && !isNaN(vMid)) {
+                if (!isNaN(hMid) && !isNaN(vMid) && isFinite(hMid) && isFinite(vMid) ) {
                   grd.addColorStop(0.5, 'hsla(' + hMid + ', 100%, ' + vMid + '%,' + 1 + ')'); //TODO: not sure why values are sometimes NaN
                   grd.addColorStop(1, 'hsla(' + hMin + ', 100%, ' + vMin + '%,' + 1 + ')');
                 } else {
