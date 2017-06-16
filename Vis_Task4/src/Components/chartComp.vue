@@ -1,138 +1,147 @@
 <template>
-<div >
-  <div v-show="init" id="chartContainer" style="height: 50vh; width: 66vw;">
-  </div>
-  <button v-if="!init" @click="initChart" class="btn btn-primary">init</button>
-</div>
+    <div>
+        <div v-show="init" id="chartContainer" style="height: 500px; width: 66vw;">
+        </div>
+        <button v-if="!init" @click="initChart" class="btn btn-primary">init</button>
+    </div>
 </template>
 
 <script>
-import {eventBus} from "../main";
-export default {
-  data () {
-    return {
-      chart: {},
-      init: false
+    import {eventBus} from "../main";
+    export default {
+        data () {
+            return {
+                chart: {},
+                init: false,
+                xAxis: "modelyear",
+                yAxis: "mpg",
+                color: "horsepower",
+                form: ""
+            }
+        },
+        props: {
+            attributesToShow: Array,
+            displayedData: Array
+        },
+        methods: {
+            attributeChanged: function (attribute) {
+                eventBus.$emit('attrChanged', attribute);
+            },
+            initChart: function () {
+                this.init = true;
+                const data = this.getDataPoints();
+                const maxY = Math.max.apply(Math, data.map(function (o) {
+                    return o.y;
+                }));
+                const maxX = Math.max.apply(Math, data.map(function (o) {
+                    return o.x;
+                }));
+
+                const minY = Math.min.apply(Math, data.map(function (o) {
+                    return o.y;
+                }));
+                const minX = Math.min.apply(Math, data.map(function (o) {
+                    return o.x;
+                }));
+                console.log(maxX, "  ", maxY, "  ", minX, "  ", minY);
+                this.chart = new CanvasJS.Chart("chartContainer",
+                    {
+                        title: {
+                            text: "Cars",
+                        },
+                        zoomEnabled: true,
+                        axisX: {
+                            title: this.xAxis,
+
+                        },
+                        axisY: {
+                            title: this.yAxis,
+                        },
+                        data: [
+                            {
+                                type: "scatter",
+                                markerType: "square",
+                                dataPoints: data
+                            }
+                        ]
+                    });
+
+                var that = this;
+                setTimeout(() => {
+                    that.chart.render();
+                }, 100);
+            },
+            getDataPoints: function () {
+
+                const valuesforColor = this.displayedData.map(function (o) {
+                    return Number.parseInt(o[this.color]);
+                }.bind(this)).filter(value => !isNaN(value));
+                const max = Math.max(...valuesforColor);
+                const min = Math.min(...valuesforColor);
+                debugger;
+                function norm(x){
+                    return ((0.7 * (x - min)) / (max - min)) + 0.3;
+                }
+
+
+                const getDataObject = function getDataObject(obj) {
+                    const x = Number.parseInt(obj[this.xAxis]);
+                    const y = Number.parseInt(obj[this.yAxis]);
+                    const color = Number.parseInt(obj[this.color]);
+                    const hex = this.hslToHex(0,100,norm(color)*100);
+                    if(isNaN(x) || isNaN(y) | isNaN(color)) return{x:"undefined",y:"undefined"};
+                    else return {x, y, color:hex};
+                }.bind(this);
+
+                return this.displayedData.map(value => getDataObject(value));
+            },
+            changeMapping: function (mapping) {
+                this.xAxis = mapping.x;
+                this.yAxis = mapping.y;
+                this.color = mapping.color;
+                this.form = mapping.form;
+                this.initChart();
+            },
+            hslToHex: function (h, s, l) {
+                h /= 360;
+                s /= 100;
+                l /= 100;
+                let r, g, b;
+                if (s === 0) {
+                    r = g = b = l; // achromatic
+                } else {
+                    const hue2rgb = (p, q, t) => {
+                        if (t < 0) t += 1;
+                        if (t > 1) t -= 1;
+                        if (t < 1 / 6) return p + (q - p) * 6 * t;
+                        if (t < 1 / 2) return q;
+                        if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+                        return p;
+                    };
+                    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                    const p = 2 * l - q;
+                    r = hue2rgb(p, q, h + 1 / 3);
+                    g = hue2rgb(p, q, h);
+                    b = hue2rgb(p, q, h - 1 / 3);
+                }
+                const toHex = x => {
+                    const hex = Math.round(x * 255).toString(16);
+                    return hex.length === 1 ? '0' + hex : hex;
+                };
+                return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+            }
+        },
+        watch:{
+            displayedData: function () {
+                this.initChart();
+            }
+        },
+        created(){
+            eventBus.$on('changedMapping', (mapping) => {
+                this.changeMapping(mapping);
+            });
+        }
     }
-  },
-  props:{
-    attributesToShow: Array,
-    displayedData: Array
-  },
-  methods: {
-    attributeChanged: function (attribute) {
-      eventBus.$emit('attrChanged', attribute);
-    },
-    initChart: function () {
-    this.init = true;
-    this.chart = new CanvasJS.Chart("chartContainer",
-    {
-     title:{
-      text: "Cars",
-    },
-    zoomEnabled: true, 
-    axisX:{
-
-      title: "Income per Annum in USD",
-      valueFormatString:  "#,##0.##",
-      minimum: 5000,
-      maximum: 100000
-    },
-    axisY:{
-      title: "Savings per year",
-      valueFormatString:  "#,##0.##",
-      prefix : "$"
-    },
-    legend: {
-      verticalAlign: "bottom",
-      horizontalAlign: "left"
-
-    },
-    data: [
-    {
-     type: "scatter",
-     color: "red",
-     legendText: "Each triangle represents one person",
-     showInLegend: "true",
-     markerType: "triangle",
-     dataPoints: this.getDataPoints()
-   }
-   ]
- });
-
-var that = this;
-setTimeout(()=>{
-  that.chart.render();
-}, 100);
-    },
-    getDataPoints: function () {
-      return [
-
-     { x: 10000, y: 1100 },
-     { x: 11000, y: 1200 },
-     { x: 13000, y: 1250 },
-     { x: 15000, y: 1280 },
-     { x: 18000, y: 1600 },
-
-     { x: 20000, y: 2200 },
-     { x: 20700, y: 2200 },
-     { x: 21000, y: 2200 },
-     { x: 24500, y: 2200 },
-     { x: 26500, y: 2530 },
-     { x: 28500, y: 3040 },
-
-     { x: 30000, y: 4030 },
-     { x: 30400, y: 3040 },
-     { x: 30600, y: 4060 },
-     { x: 31000, y: 4040 },
-     { x: 31500, y: 5100 },
-     { x: 31900, y: 4200 },
-     { x: 34400, y: 3030 },
-     { x: 37400, y: 3020 },
-
-     { x: 40000, y: 8210 },
-     { x: 40500, y: 8040 },
-     { x: 40500, y: 9060 },
-     { x: 42300, y: 8300 },
-     { x: 44100, y: 9300 },
-     { x: 45200, y: 6300 },
-     { x: 45400, y: 9900 },
-     { x: 46600, y: 4200 },
-     { x: 48500, y: 8200 },
-
-     { x: 50000, y: 9040 },
-     { x: 50300, y: 9200 },
-     { x: 50700, y: 7020 },
-     { x: 53000, y: 9040 },
-     { x: 53300, y: 9030 },
-     { x: 56700, y: 10120 },
-     { x: 58700, y: 4020 },
-
-     { x: 60000, y: 10200 },
-     { x: 60450, y: 10100 },
-     { x: 60400, y: 10400 },
-     { x: 60900, y: 9400 },
-     { x: 61000, y: 9400 },
-     { x: 64000, y: 9000 },
-     { x: 64100, y: 10600 },
-     { x: 64400, y: 10400 },
-     { x: 66000, y: 12400 },
-     { x: 66400, y: 13400 },
-
-     { x: 70400, y: 10400 },
-     { x: 73200, y: 10600 },
-     { x: 76300, y: 11000 },
-     { x: 78100, y: 12000 },
-     { x: 78500, y: 13000 },
-
-     { x: 80900, y: 10400 },
-     { x: 90500, y: 13400 }
-     ]
-    }
-  },
-  created(){
-  }
-}
 </script>
 
 <style scoped>

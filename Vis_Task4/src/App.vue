@@ -7,7 +7,7 @@
     </div>
     <div class= "main text-center">
       <div class="carMatrix">
-        <chart :displayData="displayData" :attributesToShow="attributesToShow"></chart>
+        <chart :displayedData="displayData" :attributesToShow="attributesToShow"></chart>
       </div>
     </div>
     </div>

@@ -1,63 +1,111 @@
 <template>
-  <div class="inline attriMain">
-    <h2>Choose Attributes</h2>
-    <div v-for="attr in attributes" class="attri flex">
-      <input v-if="attr !== 'car' && attr !== 'manufacturer' && attr !== 'origin' && attr !== 'car'" type="checkbox" id="attr" value="attr" @change="attributeChanged(attr)">
-      <label v-if="attr !== 'car' && attr !== 'manufacturer' && attr !== 'origin' && attr !== 'car'"for="attr">{{attr}}</label>
+    <div>
+        <h2>Define Attributes</h2>
+        <div class="flex attriMain">
+            <div id="x" class="flex select">
+                <h3>X Value: </h3>
+                <select v-model="selectedX">
+                    <option disabled value="">Please Select</option>
+                    <option v-for="attri in attributes" v-bind:value="attri">
+                        {{ attri }}
+                    </option>
+                </select>
+            </div>
+            <div id="y" class="flex select">
+                <h3>Y Value: </h3>
+                <select v-model="selectedY">
+                    <option disabled value="">Please Select</option>
+                    <option v-for="attri in attributes" v-bind:value="attri">
+                        {{ attri }}
+                    </option>
+                </select>
+            </div>
+            <div id="color" class="flex select">
+                <h3>Color: </h3>
+                <select v-model="selectedColor">
+                    <option disabled value="">Please Select</option>
+                    <option v-for="attri in attributes" v-bind:value="attri">
+                        {{ attri }}
+                    </option>
+                </select>
+            </div>
+            <div id="form" class="flex select">
+                <h3>Form: </h3>
+                <select v-model="selectedForm">
+                    <option disabled value="">Please Select</option>
+                    <option v-for="attri in attributes" v-bind:value="attri">
+                        {{ attri }}
+                    </option>
+                </select>
+            </div>
+            <button class="btn btn-primary" @click="attributesChanged">Update</button>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
-import {eventBus} from "../main";
-export default {
-  data () {
-    return {
-      checkedAttr: [this.attributes.length]
+    import {eventBus} from "../main";
+    export default {
+        data () {
+            return {
+                selectedX: "",
+                selectedY: "",
+                selectedColor: "",
+                selectedForm: ""
+            }
+        },
+        props: {
+            attributes: Array
+        },
+        methods: {
+            attributesChanged: function (attribute) {
+                eventBus.$emit('changedMapping', {
+                    x: this.selectedX,
+                    y: this.selectedY,
+                    color: this.selectedColor,
+                    form: this.selectedForm
+                });
+            }
+        },
+        created(){
+        }
     }
-  },
-  props:{
-    attributes: Array
-  },
-  methods: {
-    attributeChanged: function (attribute) {
-      eventBus.$emit('attrChanged', attribute);
-    }
-  },
-  created(){
-  }
-}
 </script>
 
 <style scoped>
-input[type='checkbox'] {
-    -webkit-appearance:none;
-    width:30px;
-    height:30px;
-    background:white;
-    border-radius:5px;
-    border:2px solid #555;
-}
-input[type='checkbox']:checked {
-    background: black;
-}
 
-label{
-  font-size: 25px;
-}
 
-.attri{
-  margin-right: 20px;
-  margin-bottom: 20px;
-}
+    label {
+        font-size: 25px;
+    }
 
-.attriMain {
-  max-width: 1000px;
-}
+    .attri {
+        margin-right: 20px;
+        margin-bottom: 20px;
+    }
 
-h2{
-  margin-bottom: 20px;
-  border-bottom: 1px solid black;
-}
+    .attriMain {
+        max-width: 1000px;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+        border-bottom: 1px solid black;
+    }
+
+    .select{
+        margin-right: 20px;
+    }
+
+    select{
+        height: 30px;
+        margin-top: 20px;
+        margin-left: 5px;
+    }
+
+    .btn{
+        height: 30px;
+        margin-top: 20px;
+    }
 
 </style>
