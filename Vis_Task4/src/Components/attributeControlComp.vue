@@ -48,9 +48,9 @@
     export default {
         data () {
             return {
-                selectedX: "",
-                selectedY: "",
-                selectedColor: "",
+                selectedX: "modelyear",
+                selectedY: "mpg",
+                selectedColor: "horsepower",
                 selectedForm: ""
             }
         },

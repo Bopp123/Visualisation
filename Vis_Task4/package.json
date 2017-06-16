@@ -9,6 +9,7 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
+    "bootstrap-select": "^1.12.2",
     "canvasjs": "^1.8.1",
     "vue": "^2.3.3"
   },
