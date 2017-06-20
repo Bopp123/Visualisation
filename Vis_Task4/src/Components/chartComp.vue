@@ -1,8 +1,5 @@
 <template>
-    <div>
-        <div v-show="init" id="chartContainer" style="height: 500px; width: 66vw;">
-        </div>
-        <button v-if="!init" @click="initChart" class="btn btn-primary">init</button>
+    <div id="chartContainer" style="height: 500px; width: 66vw;">
     </div>
 </template>
 
@@ -28,22 +25,6 @@
                 eventBus.$emit('attrChanged', attribute);
             },
             initChart: function () {
-                this.init = true;
-                const data = this.getDataPoints();
-                const maxY = Math.max.apply(Math, data.map(function (o) {
-                    return o.y;
-                }));
-                const maxX = Math.max.apply(Math, data.map(function (o) {
-                    return o.x;
-                }));
-
-                const minY = Math.min.apply(Math, data.map(function (o) {
-                    return o.y;
-                }));
-                const minX = Math.min.apply(Math, data.map(function (o) {
-                    return o.x;
-                }));
-                console.log(maxX, "  ", maxY, "  ", minX, "  ", minY);
                 this.chart = new CanvasJS.Chart("chartContainer",
                     {
                         title: {
@@ -57,19 +38,91 @@
                         axisY: {
                             title: this.yAxis,
                         },
-                        data: [
-                            {
-                                type: "scatter",
-                                markerType: "square",
-                                dataPoints: data
-                            }
-                        ]
+                        data: this.createData()
                     });
 
                 var that = this;
                 setTimeout(() => {
                     that.chart.render();
+                    console.log("rendering");
                 }, 100);
+            },
+            createData: function () {
+                if (this.form === "") return [
+                    {
+                        type: "scatter",
+                        markerType: "square",
+                        dataPoints: this.getDataPoints()
+                    }
+                ];
+
+                const data = this.getDataPoints();
+
+
+                const form = this.form;
+                const formsArray = this.displayedData.map(value => value[form]);
+                const formsArrayForMax = formsArray.map(value => Number.parseInt(value)).filter(value => !isNaN(value));
+                const maxForm = Math.max(...formsArrayForMax);
+                const minForm = Math.min(...formsArrayForMax);
+                const differnce = maxForm -minForm;
+
+                const devider = Math.floor(differnce / 4);
+                const div1 = minForm + (devider);
+                const div2 = div1 + devider;
+                const div3 = div2 + devider;
+
+                const squareArray = [];
+                const triangleArray = [];
+                const circleArray = [];
+                const crossArray = [];
+
+                formsArray.map(value => Number.parseInt(value)).forEach((value, index) => {
+                    console.log(value, index);
+
+                    if (value < div1)
+                        squareArray.push(data[index]);
+                    else if (value < div2)
+                        triangleArray.push(data[index]);
+                    else if (value < div3)
+                        circleArray.push(data[index]);
+                    else if (value < maxForm)
+                        crossArray.push(data[index]);
+                });
+
+                return [
+                    {
+                        type: "scatter",
+                        markerType: "square",
+                        showInLegend: true,
+                        legendText: `${minForm} - ${div1}`,
+                        dataPoints: squareArray,
+                        color: 'red'
+                    },
+                    {
+                        type: "scatter",
+                        markerType: "triangle",
+                        showInLegend: true,
+                        legendText: `${div1 +1} - ${div2}`,
+                        dataPoints: triangleArray,
+                        color: 'red'
+                    },
+                    {
+                        type: "scatter",
+                        markerType: "circle",
+                        showInLegend: true,
+                        legendText: `${div2 + 1} - ${div3}`,
+                        dataPoints: circleArray,
+                        color: 'red'
+                    },
+                    {
+                        type: "scatter",
+                        markerType: "cross",
+                        showInLegend: true,
+                        legendText: `${div3 + 1} - ${maxForm}`,
+                        dataPoints: crossArray,
+                        color: 'red'
+                    }
+                ];
             },
             getDataPoints: function () {
 
@@ -78,9 +131,9 @@
                 }.bind(this)).filter(value => !isNaN(value));
                 const max = Math.max(...valuesforColor);
                 const min = Math.min(...valuesforColor);
-                debugger;
-                function norm(x){
-                    return ((0.7 * (x - min)) / (max - min)) + 0.3;
+
+                function norm(x) {
+                    return ((0.7 * (x - min)) / (max - min)) + 0.2;
                 }
 
 
@@ -88,9 +141,13 @@
                     const x = Number.parseInt(obj[this.xAxis]);
                     const y = Number.parseInt(obj[this.yAxis]);
                     const color = Number.parseInt(obj[this.color]);
-                    const hex = this.hslToHex(0,100,norm(color)*100);
-                    if(isNaN(x) || isNaN(y) | isNaN(color)) return{x:"undefined",y:"undefined"};
-                    else return {x, y, color:hex};
+                    const hex = this.hslToHex(0, 100, 100 - (norm(color) * 100));
+                    if (isNaN(x) || isNaN(y) | isNaN(color)) return {x: "undefined", y: "undefined"};
+                    else return {
+                        x,
+                        y,
+                        color: hex
+                    };
                 }.bind(this);
 
                 return this.displayedData.map(value => getDataObject(value));
@@ -131,7 +188,7 @@
                 return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
             }
         },
-        watch:{
+        watch: {
             displayedData: function () {
                 this.initChart();
             }
@@ -140,6 +197,9 @@
             eventBus.$on('changedMapping', (mapping) => {
                 this.changeMapping(mapping);
             });
+        },
+        mounted(){
+            this.initChart();
         }
     }
 </script>

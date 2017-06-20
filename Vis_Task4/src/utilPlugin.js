@@ -19,6 +19,22 @@ export default {
 			return result;
 		};
 
+		vue.prototype.$formatText = function (input) {
+            const rows = input.split(/[\r\n\r\n]/).filter(value => value!== "");
+            const keynames = rows[0].split("\t");
+            const result = rows.map((row, index) => {
+                if(index !== 0){
+                    const values = row.split("\t");
+                    let obj = {};
+                   keynames.forEach((key, index) => {
+                       obj[key] = values[index];
+                   });
+                    return obj;
+                }
+            }).filter(value => value!==undefined);
+            return result;
+        }
+
 		/**
 		 * [$filterData filters given data with one or more criteria]
 		 * @param  {Array}   data   [the data you want to filter]

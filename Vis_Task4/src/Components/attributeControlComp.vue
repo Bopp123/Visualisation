@@ -48,9 +48,9 @@
     export default {
         data () {
             return {
-                selectedX: "modelyear",
-                selectedY: "mpg",
-                selectedColor: "horsepower",
+                selectedX: "",
+                selectedY: "",
+                selectedColor: "",
                 selectedForm: ""
             }
         },
@@ -68,6 +68,15 @@
             }
         },
         created(){
+            this.selectedX = this.attributes[2];
+            this.selectedY = this.attributes[4];
+            this.selectedColor = this.attributes[5];
+            eventBus.$emit('changedMapping', {
+                x: this.selectedX,
+                y: this.selectedY,
+                color: this.selectedColor,
+                form: this.selectedForm
+            });
         }
     }
 </script>
@@ -93,17 +102,17 @@
         border-bottom: 1px solid black;
     }
 
-    .select{
+    .select {
         margin-right: 20px;
     }
 
-    select{
+    select {
         height: 30px;
         margin-top: 20px;
         margin-left: 5px;
     }
 
-    .btn{
+    .btn {
         height: 30px;
         margin-top: 20px;
     }
