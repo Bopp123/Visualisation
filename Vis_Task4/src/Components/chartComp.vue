@@ -53,7 +53,7 @@
                         type: "scatter",
                         markerType: "square",
                         dataPoints: this.getDataPoints(),
-                        toolTipContent: "name: {car}"
+                        toolTipContent: "name: {car} <br/> manufracturer: {manufracturer} <br/> mpg: {mpg} <br/> cylinder: {cylinder} <br/> displacement: {displacement} <br/> ps: {ps} <br/> weight: {weight} <br/> acceleration: {acceleration} <br/> model: {model} <br/> year: {year}"
                     }
                 ];
 
@@ -98,7 +98,7 @@
                         legendText: `${minForm} - ${div1}`,
                         dataPoints: squareArray,
                         color: 'red',
-                        toolTipContent: "name: {car}"
+                        toolTipContent: "name: {car} <br/> manufracturer: {manufracturer} <br/> mpg: {mpg} <br/> cylinder: {cylinder} <br/> displacement: {displacement} <br/> ps: {ps} <br/> weight: {weight} <br/> acceleration: {acceleration} <br/> model: {model} <br/> year: {year}"
                     },
                     {
                         type: "scatter",
@@ -107,7 +107,7 @@
                         legendText: `${div1 +1} - ${div2}`,
                         dataPoints: triangleArray,
                         color: 'red',
-                        toolTipContent: "name: {car}"
+                        toolTipContent: "name: {car} <br/> manufracturer: {manufracturer} <br/> mpg: {mpg} <br/> cylinder: {cylinder} <br/> displacement: {displacement} <br/> ps: {ps} <br/> weight: {weight} <br/> acceleration: {acceleration} <br/> model: {model} <br/> year: {year}"
                     },
                     {
                         type: "scatter",
@@ -116,7 +116,7 @@
                         legendText: `${div2 + 1} - ${div3}`,
                         dataPoints: circleArray,
                         color: 'red',
-                        toolTipContent: "name: {car}"
+                        toolTipContent: "name: {car} <br/> manufracturer: {manufracturer} <br/> mpg: {mpg} <br/> cylinder: {cylinder} <br/> displacement: {displacement} <br/> ps: {ps} <br/> weight: {weight} <br/> acceleration: {acceleration} <br/> model: {model} <br/> year: {year}"
                     },
                     {
                         type: "scatter",
@@ -125,7 +125,7 @@
                         legendText: `${div3 + 1} - ${maxForm}`,
                         dataPoints: crossArray,
                         color: 'red',
-                        toolTipContent: "name: {car}"
+                        toolTipContent: "name: {car} <br/> manufracturer: {manufracturer} <br/> mpg: {mpg} <br/> cylinder: {cylinder} <br/> displacement: {displacement} <br/> ps: {ps} <br/> weight: {weight} <br/> acceleration: {acceleration} <br/> model: {model} <br/> year: {year}"
                     }
                 ];
             },
@@ -145,7 +145,16 @@
                 const getDataObject = function getDataObject(obj) {
                     const x = Number.parseInt(obj[this.xAxis]);
                     const y = Number.parseInt(obj[this.yAxis]);
-                    const name = obj.Origin || obj.Herkunft;
+                    const name = obj.Car || obj.Model;
+                    const manufracturer = obj.Manufacturer || obj.Hersteller;
+                    const mpg = obj.MPG || obj.Verbrauch;
+                    const cylinder = obj.Cylinders || obj.Zylinder;
+                    const displacement = obj.Displacement || obj.Hubraum;
+                    const horsepower = obj.Horsepower || obj.PS;
+                    const weight = obj.Weight || obj.Gewicht;
+                    const acceleration = obj.Acceleration || obj.Beschleunigung;
+                    const model = obj.Model || obj.Herkunft;
+                    const year = obj.Year || obj.Baujahr;
                     const color = Number.parseInt(obj[this.color]);
                     const hex = this.hslToHex(0, 100, 100 - (norm(color) * 100));
                     if (isNaN(x) || isNaN(y) | isNaN(color)) return {x: "undefined", y: "undefined"};
@@ -153,7 +162,16 @@
                         x,
                         y,
                         color: hex,
-                        car: name
+                        car: name,
+                        manufracturer: manufracturer,
+                        mpg: mpg,
+                        cylinder: cylinder,
+                        displacement: displacement,
+                        ps: horsepower,
+                        weight: weight,
+                        acceleration: acceleration,
+                        model: model,
+                        year: year
                     };
                 }.bind(this);
 
