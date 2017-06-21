@@ -52,7 +52,8 @@
                     {
                         type: "scatter",
                         markerType: "square",
-                        dataPoints: this.getDataPoints()
+                        dataPoints: this.getDataPoints(),
+                        toolTipContent: "name: {car}"
                     }
                 ];
 
@@ -96,7 +97,8 @@
                         showInLegend: true,
                         legendText: `${minForm} - ${div1}`,
                         dataPoints: squareArray,
-                        color: 'red'
+                        color: 'red',
+                        toolTipContent: "name: {car}"
                     },
                     {
                         type: "scatter",
@@ -104,7 +106,8 @@
                         showInLegend: true,
                         legendText: `${div1 +1} - ${div2}`,
                         dataPoints: triangleArray,
-                        color: 'red'
+                        color: 'red',
+                        toolTipContent: "name: {car}"
                     },
                     {
                         type: "scatter",
@@ -112,7 +115,8 @@
                         showInLegend: true,
                         legendText: `${div2 + 1} - ${div3}`,
                         dataPoints: circleArray,
-                        color: 'red'
+                        color: 'red',
+                        toolTipContent: "name: {car}"
                     },
                     {
                         type: "scatter",
@@ -120,7 +124,8 @@
                         showInLegend: true,
                         legendText: `${div3 + 1} - ${maxForm}`,
                         dataPoints: crossArray,
-                        color: 'red'
+                        color: 'red',
+                        toolTipContent: "name: {car}"
                     }
                 ];
             },
@@ -140,13 +145,15 @@
                 const getDataObject = function getDataObject(obj) {
                     const x = Number.parseInt(obj[this.xAxis]);
                     const y = Number.parseInt(obj[this.yAxis]);
+                    const name = obj.Origin || obj.Herkunft;
                     const color = Number.parseInt(obj[this.color]);
                     const hex = this.hslToHex(0, 100, 100 - (norm(color) * 100));
                     if (isNaN(x) || isNaN(y) | isNaN(color)) return {x: "undefined", y: "undefined"};
                     else return {
                         x,
                         y,
-                        color: hex
+                        color: hex,
+                        car: name
                     };
                 }.bind(this);
 
