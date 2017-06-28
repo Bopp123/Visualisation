@@ -141,7 +141,6 @@
                     return ((0.7 * (x - min)) / (max - min)) + 0.2;
                 }
 
-
                 const getDataObject = function getDataObject(obj) {
                     const x = Number.parseInt(obj[this.xAxis]);
                     const y = Number.parseInt(obj[this.yAxis]);
@@ -153,8 +152,8 @@
                     const horsepower = obj.Horsepower || obj.PS;
                     const weight = obj.Weight || obj.Gewicht;
                     const acceleration = obj.Acceleration || obj.Beschleunigung;
-                    const model = obj.Model || obj.Herkunft;
-                    const year = obj.Year || obj.Baujahr;
+                    const model = obj.Origin || obj.Herkunft;
+                    const year = obj.ModelYear || obj.Baujahr;
                     const color = Number.parseInt(obj[this.color]);
                     const hex = this.hslToHex(0, 100, 100 - (norm(color) * 100));
                     if (isNaN(x) || isNaN(y) | isNaN(color)) return {x: "undefined", y: "undefined"};
